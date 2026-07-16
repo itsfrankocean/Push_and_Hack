@@ -1,0 +1,29 @@
+Round 4 Character Lighting Report
+=================================
+
+[Prefab]
+Prefab: Assets/Prefabs/Player.prefab
+Hierarchy path: Player > MC
+SpriteRenderer GameObject: MC
+ShadowCaster2D before repair: Player > MC
+ShadowCaster2D after repair: MC
+MC material: Assets/Materials/Sprite-Lit-Default.mat
+MC current sprite: Assets/Sprites/Characters/MC(Idle2)).png
+MC animation/combat sprite sheets:
+- Assets/Sprites/Characters/MC(AimDown).png: _NormalMap -> Assets/Sprites/Characters/MC(AimDown)_Normal.png, normal sRGB=False
+- Assets/Sprites/Characters/MC(AimUp).png: _NormalMap -> Assets/Sprites/Characters/MC(AimUp)_Normal.png, normal sRGB=False
+- Assets/Sprites/Characters/MC(Idle2)).png: _NormalMap -> Assets/Sprites/Characters/MC(Idle2))_Normal.png, normal sRGB=False
+- Assets/Sprites/Characters/MC(Jump).png: _NormalMap -> Assets/Sprites/Characters/MC(Jump)_Normal.png, normal sRGB=False
+- Assets/Sprites/Characters/MC(Push).png: _NormalMap -> Assets/Sprites/Characters/MC(Push)_Normal.png, normal sRGB=False
+- Assets/Sprites/Characters/MC(Ready).png: _NormalMap -> Assets/Sprites/Characters/MC(Ready)_Normal.png, normal sRGB=False
+- Assets/Sprites/Stage/Materials/다운로드 (2).png: _NormalMap -> Assets/Sprites/Stage/Materials/다운로드 (2)_Normal.png, normal sRGB=False
+Prefab changed: True
+
+[Level2 Scene]
+Scene: Assets/Scenes/Level2.unity
+Hierarchy path: Player > MC
+SpriteRenderer GameObject: MC
+ShadowCaster2D GameObjects: Player > MC
+MC has PlayerSpriteLightingRefresh: True
+MC current sprite secondary normal: _NormalMap -> Assets/Sprites/Characters/MC(Idle2))_Normal.png, normal sRGB=False
+

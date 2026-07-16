@@ -27,6 +27,7 @@ public class AudioManager : MonoBehaviour
     [Header("SFX Source")]
     public AudioSource sfxSource;
     public AudioClip sfxWoodPush;          // �������� ������ �Ҹ�
+    public AudioClip sfxWoodDisplacePush;
     public AudioClip sfxReverse;           // �÷��̾� �ڷ� ���ư� ��
 
     [Header("Aim Mode SFX")]

@@ -1104,7 +1104,7 @@ MonoBehaviour:
   m_ComponentVersion: 5
   m_HasRenderer: 1
   m_UseRendererSilhouette: 1
-  m_CastsShadows: 0
+  m_CastsShadows: 1
   m_SelfShadows: 0
   m_AlphaCutoff: 0.1
   m_ApplyToSortingLayers: 000000001be687ab93bcef9151c55ab3
@@ -1984,8 +1984,8 @@ MonoBehaviour:
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
-  m_NormalMapQuality: 0
-  m_UseNormalMap: 0
+  m_NormalMapQuality: 1
+  m_UseNormalMap: 1
   m_ShadowsEnabled: 1
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
@@ -2090,7 +2090,7 @@ MonoBehaviour:
     count: 5
     projectilePrefab: {fileID: 786591408219631426, guid: 7a3c6abf7e7b44d3b9586ffecb9c2d51, type: 3}
   - ammoName: Displace
-    icon: {fileID: -4533853425426199605, guid: 0894b099e96943ef90337513386c93a8, type: 3}
+    icon: {fileID: -3981987312920499079, guid: 2b1a0d44f76a35c42856de64a7d2991b, type: 3}
     count: 2
     projectilePrefab: {fileID: 786591408219631426, guid: 0728d76317da41189c7d0619a3b34dc7, type: 3}
   - ammoName: Pull
@@ -2710,8 +2710,8 @@ MonoBehaviour:
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
-  m_NormalMapQuality: 0
-  m_UseNormalMap: 0
+  m_NormalMapQuality: 1
+  m_UseNormalMap: 1
   m_ShadowsEnabled: 1
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
@@ -4208,8 +4208,8 @@ MonoBehaviour:
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
-  m_NormalMapQuality: 0
-  m_UseNormalMap: 0
+  m_NormalMapQuality: 1
+  m_UseNormalMap: 1
   m_ShadowsEnabled: 1
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3
@@ -4548,8 +4548,8 @@ MonoBehaviour:
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
-  m_NormalMapQuality: 2
-  m_UseNormalMap: 0
+  m_NormalMapQuality: 1
+  m_UseNormalMap: 1
   m_ShadowsEnabled: 1
   m_ShadowIntensity: 0.75
   m_ShadowSoftness: 0.3

@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviour
     public float gridCellSize = 1f;
     [Min(0f)]
     public float maxStartGridSnapDistance = 0.75f;
+    [Min(0f)]
+    public float gridOffsetTolerance = 0.05f;
 
     [Header("사망 연출")]
     public Sprite deathSprite;
@@ -498,7 +500,7 @@ public class PlayerController : MonoBehaviour
     {
         if (pushableBoxes == null || pushableBoxes.Length == 0)
         {
-            pushableBoxes = FindObjectsOfType<PushableBox>();
+            pushableBoxes = FindObjectsByType<PushableBox>(FindObjectsSortMode.None);
         }
     }
 
@@ -529,6 +531,7 @@ public class PlayerController : MonoBehaviour
             return false;
 
         float cellSize = GetGridCellSize();
+        bool foundReference = false;
 
         for (int i = 0; i < pushableBoxes.Length; i++)
         {
@@ -537,13 +540,22 @@ public class PlayerController : MonoBehaviour
                 continue;
 
             Vector3 boxPosition = box.transform.position;
-            gridOffset = new Vector2(
+            Vector2 boxOffset = new Vector2(
                 GetGridAxisOffset(boxPosition.x, cellSize),
                 GetGridAxisOffset(boxPosition.y, cellSize));
-            return true;
+
+            if (!foundReference)
+            {
+                gridOffset = boxOffset;
+                foundReference = true;
+                continue;
+            }
+
+            if (!IsSameGridOffset(gridOffset, boxOffset, cellSize))
+                return false;
         }
 
-        return false;
+        return foundReference;
     }
 
     private Vector3 AlignPositionToGrid(Vector3 position, Vector2 gridOffset)
@@ -567,6 +579,19 @@ public class PlayerController : MonoBehaviour
     private float GetGridCellSize()
     {
         return Mathf.Max(0.01f, Mathf.Abs(gridCellSize));
+    }
+
+    private bool IsSameGridOffset(Vector2 a, Vector2 b, float cellSize)
+    {
+        return IsSameGridAxisOffset(a.x, b.x, cellSize) &&
+               IsSameGridAxisOffset(a.y, b.y, cellSize);
+    }
+
+    private bool IsSameGridAxisOffset(float a, float b, float cellSize)
+    {
+        float difference = Mathf.Abs(a - b);
+        difference = Mathf.Min(difference, cellSize - difference);
+        return difference <= gridOffsetTolerance;
     }
 
     private bool AreBoxesBusy()

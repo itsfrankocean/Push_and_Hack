@@ -189,15 +189,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PatrolEnemy
   direction: 0
+  startsMovingForward: 1
+  startFacingLeft: 0
   stepSize: 1
-  distance: 100
   moveSpeed: 5
   whatStopsMovement:
     serializedVersion: 2
     m_Bits: 384
+  moveCheckBoxSize: {x: 0.64, y: 0.4}
   spriteTransform: {fileID: 3611651150185165408}
+  flipXWhenMovingLeft: 1
+  flipYWhenMovingDown: 0
   jumpHeight: 0.35
-  resetLevelOnTouch: 1
+  dustAnimPrefab: {fileID: 6038986386290800227, guid: 227b2a86775675c469144764a5daaf34, type: 3}
+  dustOffset: {x: 0, y: 0, z: 0}
+  dustDestroyTime: 0.45
+  dustSortingOrderOffset: -1
+  killPlayerOnTouch: 1
+  health: 10
 --- !u!61 &-6768868898124774176
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -43,7 +43,8 @@ GameObject:
   - component: {fileID: 4240694282792547271}
   - component: {fileID: 8348861037330118550}
   - component: {fileID: 7836837745582564156}
-  - component: {fileID: 5923187460587136128}
+  - component: {fileID: 6633237196675496647}
+  - component: {fileID: 7217439143021861122}
   m_Layer: 12
   m_Name: MC
   m_TagString: Untagged
@@ -92,7 +93,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: a2d2d9b4c1e00c046a55e45b6d280af7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -125,59 +126,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &5923187460587136128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2444680521257767119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.ShadowCaster2D
-  m_ShadowGroup: 0
-  m_Priority: 10
-  m_ComponentVersion: 5
-  m_HasRenderer: 1
-  m_UseRendererSilhouette: 1
-  m_CastsShadows: 1
-  m_SelfShadows: 0
-  m_AlphaCutoff: 0.1
-  m_ApplyToSortingLayers: 000000001be687ab93bcef9151c55ab3
-  m_ShapePath:
-  - {x: -0.375, y: 0, z: 0}
-  - {x: -0.375, y: 1.21875, z: 0}
-  - {x: 0.375, y: 1.21875, z: 0}
-  - {x: 0.375, y: 0, z: 0}
-  m_ShapePathHash: 0
-  m_InstanceId: 0
-  m_ShadowShape2DComponent: {fileID: 4240694282792547271}
-  m_ShadowShape2DProvider:
-    rid: 798860435509478100
-  m_ShadowCastingSource: 2
-  m_ShadowMesh:
-    m_Mesh: {fileID: 0}
-    m_LocalBounds:
-      m_Center: {x: 0, y: 0.609375, z: 0}
-      m_Extent: {x: 0.375, y: 0.609375, z: 0}
-    m_EdgeProcessing: 1
-    m_TrimEdge: 0.03
-    m_FlipX: 0
-    m_FlipY: 0
-    m_InitialTrim: 0.03
-  m_CastingOption: 1
-  m_PreviousTrimEdge: 0.03
-  m_PreviousEdgeProcessing: 1
-  m_PreviousShadowCastingSource: 2
-  m_PreviousShadowShape2DSource: {fileID: 4240694282792547271}
-  references:
-    version: 2
-    RefIds:
-    - rid: 798860435509478100
-      type: {class: ShadowShape2DProvider_SpriteRenderer, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
-      data: 
 --- !u!95 &8348861037330118550
 Animator:
   serializedVersion: 7
@@ -215,6 +163,93 @@ MonoBehaviour:
   sortPoint: {fileID: 3808812288295616700}
   orderOffset: 0
   precision: 100
+--- !u!114 &6633237196675496647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2444680521257767119}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.ShadowCaster2D
+  m_ShadowGroup: 0
+  m_Priority: 0
+  m_ComponentVersion: 5
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 0
+  m_SelfShadows: 0
+  m_AlphaCutoff: 0.1
+  m_ApplyToSortingLayers: 000000001be687ab93bcef9151c55ab3
+  m_ShapePath:
+  - {x: -0.375, y: 0, z: 0}
+  - {x: -0.375, y: 1.21875, z: 0}
+  - {x: 0.37499997, y: 1.21875, z: 0}
+  - {x: 0.37499997, y: 0, z: 0}
+  m_ShapePathHash: 0
+  m_InstanceId: 0
+  m_ShadowShape2DComponent: {fileID: 4240694282792547271}
+  m_ShadowShape2DProvider:
+    rid: 147183087844327541
+  m_ShadowCastingSource: 2
+  m_ShadowMesh:
+    m_Mesh: {fileID: 0}
+    m_LocalBounds:
+      m_Center: {x: 0, y: 0.609375, z: 0}
+      m_Extent: {x: 0.34500122, y: 0.5793762, z: 0}
+    m_EdgeProcessing: 1
+    m_TrimEdge: 0
+    m_FlipX: 0
+    m_FlipY: 0
+    m_InitialTrim: 0
+  m_CastingOption: 3
+  m_PreviousTrimEdge: 0
+  m_PreviousEdgeProcessing: -1
+  m_PreviousShadowCastingSource: -1
+  m_PreviousShadowShape2DSource: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: 147183087844327541
+      type: {class: ShadowShape2DProvider_SpriteRenderer, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data: 
+--- !u!114 &7217439143021861122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2444680521257767119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14409133d2f34f64a85d8bea4b655a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disableShadowCaster2D: 1
+  shadowColor: {r: 0, g: 0, b: 0, a: 0.62}
+  footAnchorOffset: {x: 0, y: 0.02}
+  widthScale: 1.35
+  baseLength: 0.58
+  maxLength: 1.45
+  lightDistanceForMaxLength: 4.6
+  shearStrength: 0.78
+  verticalFlatten: 0.28
+  sideHeightLift: 0.24
+  upwardLengthBoost: 1.12
+  maxShadowLights: 4
+  minLightContribution: 0.04
+  lightOcclusionInset: 0.08
+  floorReceiverMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  wallCollisionMask:
+    serializedVersion: 2
+    m_Bits: 128
+  upperWallMinimumUpDot: 0.35
+  sortingOrderOffset: -3
 --- !u!1 &4082011021268899061
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,12 +460,20 @@ MonoBehaviour:
   dustAnimPrefab: {fileID: 6038986386290800227, guid: 227b2a86775675c469144764a5daaf34, type: 3}
   dustOffset: {x: 0, y: -0.4, z: 0}
   dustDestroyTime: 0.45
+  dustSortingOrderOffset: -1
   moveCheckBoxSize: {x: 0.64, y: 0.4}
   pushableBoxes: []
+  alignStartToPushableGrid: 1
+  gridCellSize: 1
+  maxStartGridSnapDistance: 0.75
+  gridOffsetTolerance: 0.05
   deathSprite: {fileID: 0}
   electricDeathDuration: 0.25
   electricDeathArcHeight: 0.6
   electricDeathResetDelay: 0.15
+  undoKey: 113
+  undoHoldRepeatDelay: 0.18
+  waitTurnKey: 32
 --- !u!61 &9051901362923167855
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -532,8 +575,19 @@ MonoBehaviour:
   requireAmmoToShoot: 1
   ammoPopupUI: {fileID: 0}
   aimLine: {fileID: 8054504549829835207}
+  aimLineColor: {r: 1, g: 0, b: 0, a: 1}
   muzzleFlashObject: {fileID: 8313543432787101424}
   flashDuration: 0.05
+  shootShakeDuration: 0.04
+  shootShakeMagnitude: 0.08
+  recoilDistance: 0.08
+  recoilKickTime: 0.035
+  recoilReturnTime: 0.055
+  muzzleFlashScaleRange: {x: 0.9, y: 1.35}
+  muzzleFlashRandomRotation: 18
+  tracerDuration: 0.055
+  tracerWidth: 0.06
+  tracerColor: {r: 1, g: 0.12, b: 0.02, a: 0.95}
 --- !u!1 &7917487638351338830
 GameObject:
   m_ObjectHideFlags: 0
@@ -623,7 +677,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: a2d2d9b4c1e00c046a55e45b6d280af7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

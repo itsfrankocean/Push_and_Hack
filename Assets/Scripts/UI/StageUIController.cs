@@ -1049,6 +1049,7 @@ public class StageUIController : MonoBehaviour
         labelText.raycastTarget = false;
 
         hoverEffect.ConfigureLabel(labelText, pauseSelectedTextColor, pauseSelectedTextScale);
+        hoverEffect.SetHighlightWhenSelected(true);
 
         return button;
     }
@@ -1192,6 +1193,7 @@ public class StageUIController : MonoBehaviour
         CreatePauseButtonFrame(rowObject.transform, pauseSettingsRowSize);
         TMP_Text labelText = CreatePauseSettingsRowLabel(rowObject.transform, label);
         hoverEffect.ConfigureLabel(labelText, pauseSelectedTextColor, pauseSelectedTextScale);
+        hoverEffect.SetHighlightWhenSelected(true);
 
         Slider slider = CreatePauseSettingsSlider(rowObject.transform, value, settingIndex);
         pauseSettingsSliders[settingIndex] = slider;
@@ -1394,6 +1396,7 @@ public class StageUIController : MonoBehaviour
         labelText.raycastTarget = false;
 
         hoverEffect.ConfigureLabel(labelText, pauseSelectedTextColor, pauseSelectedTextScale);
+        hoverEffect.SetHighlightWhenSelected(true);
         return button;
     }
 

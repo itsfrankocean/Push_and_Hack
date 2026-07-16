@@ -21,6 +21,7 @@ public class StageButtonHoverEffect : MonoBehaviour,
     private Color selectedLabelColor;
     private Vector3 normalLabelScale;
     private float selectedLabelScale = 1f;
+    private bool highlightWhenSelected = false;
     private bool useLabelEffect;
     private bool isPointerInside;
     private bool isSelected;
@@ -62,6 +63,12 @@ public class StageButtonHoverEffect : MonoBehaviour,
             useLabelEffect = true;
         }
 
+        ApplyVisual();
+    }
+
+    public void SetHighlightWhenSelected(bool value)
+    {
+        highlightWhenSelected = value;
         ApplyVisual();
     }
 
@@ -124,7 +131,7 @@ public class StageButtonHoverEffect : MonoBehaviour,
             return;
         }
 
-        bool isActive = isPointerInside || isSelected;
+        bool isActive = isPointerInside || (highlightWhenSelected && isSelected);
         overlayImage.color = isActive ? hoverColor : Color.clear;
         ApplyLabelVisual(isActive);
     }

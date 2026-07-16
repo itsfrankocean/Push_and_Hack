@@ -13,6 +13,7 @@ public class PatrolEnemy : MonoBehaviour, IDamageable, ITurnActor, IProjectileDi
     public PatrolDirection direction = PatrolDirection.Horizontal;
     public bool startsMovingForward = true;
     public bool startFacingLeft = false;
+    [Min(0.01f)]
     public float stepSize = 1f;
     public float moveSpeed = 5f;
 
@@ -23,8 +24,14 @@ public class PatrolEnemy : MonoBehaviour, IDamageable, ITurnActor, IProjectileDi
     [Header("Visual")]
     public Transform spriteTransform;
     public bool flipXWhenMovingLeft = true;
-    public bool flipYWhenMovingDown = true;
+    public bool flipYWhenMovingDown = false;
     public float jumpHeight = 0.35f;
+
+    [Header("Dust Effect")]
+    public GameObject dustAnimPrefab;
+    public Vector3 dustOffset = Vector3.zero;
+    public float dustDestroyTime = 0.45f;
+    public int dustSortingOrderOffset = -1;
 
     [Header("Player Contact")]
     public bool killPlayerOnTouch = true;
@@ -103,20 +110,43 @@ public class PatrolEnemy : MonoBehaviour, IDamageable, ITurnActor, IProjectileDi
 
         SaveTurnRecord();
 
-        Vector3 step = GetMoveDirection() * stepSize;
+        Vector3 step = GetMoveDirection() * GetStepSize();
+
+        if (TryStartMove(step))
+            return;
+
+        ReverseDirection();
+        step = GetMoveDirection() * GetStepSize();
+
+        if (TryStartMove(step))
+            return;
+
+        KillPlayerIfTouching();
+    }
+
+    private bool TryStartMove(Vector3 step)
+    {
         Vector3 nextPosition = targetPosition + step;
 
         if (IsBlocked(nextPosition))
         {
-            ReverseDirection();
-            KillPlayerIfTouching();
-            return;
+            return false;
         }
 
         targetPosition = nextPosition;
         BeginMoveVisual(step);
-        ApplyFacing();
+        ApplyFacing(step);
         KillPlayerIfAt(targetPosition);
+
+        return true;
+    }
+
+    private float GetStepSize()
+    {
+        if (Mathf.Approximately(stepSize, 0f))
+            return 1f;
+
+        return Mathf.Abs(stepSize);
     }
 
     public void UndoTurn()
@@ -125,7 +155,6 @@ public class PatrolEnemy : MonoBehaviour, IDamageable, ITurnActor, IProjectileDi
             return;
 
         TurnRecord record = history.Pop();
-        Vector3 undoStep = record.TargetPosition - targetPosition;
 
         targetPosition = record.TargetPosition;
         directionSign = record.DirectionSign;
@@ -136,10 +165,7 @@ public class PatrolEnemy : MonoBehaviour, IDamageable, ITurnActor, IProjectileDi
             spriteRenderer.flipY = record.FlipY;
         }
 
-        if (undoStep != Vector3.zero)
-            BeginMoveVisual(undoStep);
-        else
-            ResetMoveVisual();
+        ResetMoveVisual();
     }
 
     public void TakeDamage(int damage)
@@ -278,6 +304,9 @@ public class PatrolEnemy : MonoBehaviour, IDamageable, ITurnActor, IProjectileDi
 
     private bool IsBlocked(Vector3 position)
     {
+        if (IsBlockedByPushableBox(position))
+            return true;
+
         if (whatStopsMovement.value == 0)
             return false;
 
@@ -303,6 +332,32 @@ public class PatrolEnemy : MonoBehaviour, IDamageable, ITurnActor, IProjectileDi
         return false;
     }
 
+    private bool IsBlockedByPushableBox(Vector3 position)
+    {
+        PushableBox[] boxes = FindObjectsByType<PushableBox>(FindObjectsSortMode.None);
+
+        for (int i = 0; i < boxes.Length; i++)
+        {
+            PushableBox box = boxes[i];
+
+            if (box == null || !box.isActiveAndEnabled)
+                continue;
+
+            Transform boxTransform = box.transform;
+
+            if (boxTransform == transform || boxTransform.IsChildOf(transform))
+                continue;
+
+            if (IsSameTile(box.GetCurrentTilePosition(), position) ||
+                IsSameTile(boxTransform.position, position))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private Vector2 GetCheckCenter(Vector3 position)
     {
         if (ownCollider is BoxCollider2D boxCollider)
@@ -316,6 +371,55 @@ public class PatrolEnemy : MonoBehaviour, IDamageable, ITurnActor, IProjectileDi
         moveInProgress = true;
         moveProgress = 0f;
         currentMoveDistance = Mathf.Max(step.magnitude, 0.001f);
+        PlayDustEffect(step);
+    }
+
+    private void PlayDustEffect(Vector3 moveDirection)
+    {
+        ResolveDustPrefabIfNeeded();
+
+        if (dustAnimPrefab == null)
+            return;
+
+        Vector3 spawnPosition = transform.position + dustOffset;
+        GameObject dust = Instantiate(dustAnimPrefab, spawnPosition, GetDustRotation());
+        ApplyDustSorting(dust);
+        Destroy(dust, Mathf.Max(0.01f, dustDestroyTime));
+    }
+
+    private void ResolveDustPrefabIfNeeded()
+    {
+        if (dustAnimPrefab != null)
+            return;
+
+        PlayerController player = FindPlayer();
+        if (player != null)
+            dustAnimPrefab = player.dustAnimPrefab;
+    }
+
+    private Quaternion GetDustRotation()
+    {
+        if (spriteRenderer != null && spriteRenderer.flipX)
+            return Quaternion.Euler(0f, 180f, 0f);
+
+        return Quaternion.identity;
+    }
+
+    private void ApplyDustSorting(GameObject dust)
+    {
+        if (dust == null || spriteRenderer == null)
+            return;
+
+        SpriteRenderer[] dustRenderers = dust.GetComponentsInChildren<SpriteRenderer>(true);
+
+        for (int i = 0; i < dustRenderers.Length; i++)
+        {
+            if (dustRenderers[i] == null)
+                continue;
+
+            dustRenderers[i].sortingLayerID = spriteRenderer.sortingLayerID;
+            dustRenderers[i].sortingOrder = spriteRenderer.sortingOrder + dustSortingOrderOffset;
+        }
     }
 
     private void UpdateMoveVisual(bool arrived)

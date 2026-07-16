@@ -7,7 +7,6 @@ public class ShootCommand : ICommand
 
     private int usedAmmoIndex = -1;
     private bool consumedAmmo = false;
-    private bool steppedEnemies = false;
     private bool undone = false;
 
     private GameObject spawnedProjectile;
@@ -59,8 +58,6 @@ public class ShootCommand : ICommand
             consumedAmmo = false;
             return false;
         }
-
-        StepEnemiesForShotTurn();
 
         return true;
     }
@@ -134,9 +131,6 @@ public class ShootCommand : ICommand
         for (int i = destroyedBoxes.Count - 1; i >= 0; i--)
             destroyedBoxes[i].Restore();
 
-        if (steppedEnemies && TurnManager.Instance != null)
-            TurnManager.Instance.UndoTurn();
-
         if (combat == null)
             return;
 
@@ -178,22 +172,6 @@ public class ShootCommand : ICommand
         targetPositionBeforeDisplace = targetPositionBefore;
         hasDisplacedTarget = true;
         displacementSelection = null;
-    }
-
-    private void StepEnemiesForShotTurn()
-    {
-        if (TurnManager.Instance == null)
-            return;
-
-        TurnManager.Instance.StepTurn();
-        steppedEnemies = true;
-
-        if (combat == null)
-            return;
-
-        PlayerController player = combat.GetComponent<PlayerController>();
-        if (player != null)
-            player.KillIfOnEnemyTile();
     }
 
     private readonly struct DestroyedBoxState

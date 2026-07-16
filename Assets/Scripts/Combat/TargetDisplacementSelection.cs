@@ -4,6 +4,8 @@ using UnityEngine;
 public class TargetDisplacementSelection : MonoBehaviour
 {
     private const float IndicatorCellInset = 0.92f;
+    private const int IndicatorSortingOffset = -1;
+    private const int IndicatorSortingPrecision = 100;
     private static readonly Color IndicatorColor = new Color(1f, 0.02f, 0f, 0.78f);
     private static readonly Color IndicatorPulseColor = new Color(1f, 0.02f, 0f, 1f);
 
@@ -64,7 +66,7 @@ public class TargetDisplacementSelection : MonoBehaviour
             return false;
 
         if (activeSelection != null)
-            activeSelection.CancelSelection(false);
+            activeSelection.CancelSelection();
 
         MonoBehaviour targetBehaviour = target as MonoBehaviour;
         if (targetBehaviour == null || target.IsBusy)
@@ -76,7 +78,7 @@ public class TargetDisplacementSelection : MonoBehaviour
 
         if (selection.validDirections.Count == 0)
         {
-            selection.CancelSelection(false);
+            selection.CancelSelection();
             return false;
         }
 
@@ -88,7 +90,7 @@ public class TargetDisplacementSelection : MonoBehaviour
 
     public void CancelFromUndo()
     {
-        CancelSelection(false);
+        CancelSelection();
     }
 
     private void Initialize(
@@ -125,22 +127,21 @@ public class TargetDisplacementSelection : MonoBehaviour
 
         if (ownerCommand == null || !ownerCommand.CanApplyProjectileEffect())
         {
-            CancelSelection(false);
+            CancelSelection();
             return;
         }
 
         Vector3 inputDirection = ReadDirectionInput();
         if (inputDirection != Vector3.zero)
         {
-            TryApplyDirection(inputDirection);
+            if (IsValidDirection(inputDirection))
+                TryApplyDirection(inputDirection);
+
             return;
         }
 
         if (Input.GetMouseButtonDown(0))
             TryApplyMouseSelection();
-
-        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.X))
-            CancelSelection(true);
     }
 
     private void CacheValidDirections()
@@ -159,6 +160,7 @@ public class TargetDisplacementSelection : MonoBehaviour
     private void CreateIndicators()
     {
         EnsureTileSprite();
+        SpriteRenderer targetRenderer = target.GetDisplacementRenderer();
 
         for (int i = 0; i < validDirections.Count; i++)
         {
@@ -174,11 +176,25 @@ public class TargetDisplacementSelection : MonoBehaviour
             renderer.sprite = tileSprite;
             renderer.sharedMaterial = GetIndicatorMaterial();
             renderer.color = IndicatorColor;
-            renderer.sortingLayerName = "Player";
-            renderer.sortingOrder = 20000;
+            ApplyIndicatorSorting(renderer, indicator.transform, targetRenderer);
 
             indicators.Add(indicator);
         }
+    }
+
+    private void ApplyIndicatorSorting(SpriteRenderer renderer, Transform sortPoint, SpriteRenderer targetRenderer)
+    {
+        if (renderer == null || sortPoint == null)
+            return;
+
+        if (targetRenderer != null)
+            renderer.sortingLayerID = targetRenderer.sortingLayerID;
+
+        renderer.sortingOrder = IndicatorSortingOffset -
+                                Mathf.RoundToInt(sortPoint.position.y * IndicatorSortingPrecision);
+
+        YSortByFeet sorter = renderer.gameObject.AddComponent<YSortByFeet>();
+        sorter.Configure(sortPoint, IndicatorSortingOffset, IndicatorSortingPrecision);
     }
 
     private static void EnsureTileSprite()
@@ -282,21 +298,15 @@ public class TargetDisplacementSelection : MonoBehaviour
     private void TryApplyDirection(Vector3 direction)
     {
         if (!IsValidDirection(direction))
-        {
-            PlayBlockedSound();
             return;
-        }
 
         if (targetBehaviour == null || target == null || !target.Displace(direction))
-        {
-            PlayBlockedSound();
             return;
-        }
 
         inputReleasePending = true;
         ownerCommand.RecordDisplacedTarget(target, targetPositionBefore);
 
-        if (CameraShake.Instance != null)
+        if (!(targetBehaviour is PushableBox) && CameraShake.Instance != null)
             CameraShake.Instance.Shake(0.08f, 0.08f);
 
         FinishSelection();
@@ -313,11 +323,8 @@ public class TargetDisplacementSelection : MonoBehaviour
         return false;
     }
 
-    private void CancelSelection(bool playBlockedSound)
+    private void CancelSelection()
     {
-        if (playBlockedSound)
-            PlayBlockedSound();
-
         inputReleasePending = true;
         FinishSelection();
     }
@@ -354,12 +361,6 @@ public class TargetDisplacementSelection : MonoBehaviour
         }
 
         indicators.Clear();
-    }
-
-    private void PlayBlockedSound()
-    {
-        if (AudioManager.I != null)
-            AudioManager.I.PlayOneShot(AudioManager.I.sfxMetalUnbreakable, 1f);
     }
 
     private void CacheGrid()

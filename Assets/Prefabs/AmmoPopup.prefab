@@ -192,6 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AmmoPopupAnimator
   rect: {fileID: 3799053439667216978}
+  ammoPopupUI: {fileID: 0}
   showX: 250
   hideX: -170
   speed: 8
@@ -219,7 +220,7 @@ MonoBehaviour:
     count: 5
     projectilePrefab: {fileID: 786591408219631426, guid: 7a3c6abf7e7b44d3b9586ffecb9c2d51, type: 3}
   - ammoName: Displace
-    icon: {fileID: -4533853425426199605, guid: 0894b099e96943ef90337513386c93a8, type: 3}
+    icon: {fileID: -3981987312920499079, guid: 2b1a0d44f76a35c42856de64a7d2991b, type: 3}
     count: 2
     projectilePrefab: {fileID: 786591408219631426, guid: 0728d76317da41189c7d0619a3b34dc7, type: 3}
   - ammoName: Pull

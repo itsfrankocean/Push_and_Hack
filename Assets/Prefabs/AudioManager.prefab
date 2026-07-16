@@ -154,6 +154,7 @@ MonoBehaviour:
   sfxCrateBreak: {fileID: 8300000, guid: 5d4e7fb8386924241bd815c070c254cb, type: 3}
   sfxTeleport: {fileID: 8300000, guid: d9935197509f1b14b9d4a402d2905a6b, type: 3}
   sfxSource: {fileID: 6273861102419766610}
+  sfxWoodDisplacePush: {fileID: 8300000, guid: b1795d6b03b9763419563d853d85be73, type: 3}
   sfxReverse: {fileID: 8300000, guid: 4cd5ebfc225e3d947bcac5c33d35eed9, type: 3}
   sfxAimEnter: {fileID: 8300000, guid: cf82ab997d16d2d498cd8b3a0f54267f, type: 3}
   sfxAimRotate: {fileID: 8300000, guid: 806fd911767dfe74dae2f3ef7d14abe5, type: 3}

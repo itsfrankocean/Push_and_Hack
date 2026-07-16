@@ -23,14 +23,26 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
     public GameObject hitAnimPrefab;
     public Vector3 hitEffectOffset = new Vector3(0f, 0f, 0f);
 
+    [Header("Displace Afterimage")]
+    public bool showDisplaceAfterimage = true;
+    public float displaceAfterimageInterval = 0.04f;
+    public float displaceAfterimageLifetime = 0.18f;
+    [Range(0f, 1f)]
+    public float displaceAfterimageAlpha = 0.45f;
+    public Color displaceAfterimageTint = new Color(1f, 0.15f, 0.05f, 1f);
+
     public GameObject debrisPrefab;
 
     [Header("디버그")]
     public bool showMoveCheckBox = true;
 
     private bool isUndoing = false;
+    private bool useMoveBounce = true;
+    private bool useDisplaceAfterimage = false;
+    private float nextDisplaceAfterimageTime = 0f;
     private Vector3 lastMoveDirection = Vector3.zero;
     private GameObject activeDebris;
+    private SpriteRenderer cachedSpriteRenderer;
 
     private const float ARRIVE_THRESHOLD = 0.05f;
     private const float ARRIVE_THRESHOLD_SQR = ARRIVE_THRESHOLD * ARRIVE_THRESHOLD;
@@ -54,7 +66,13 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
         }
 
         if (spriteTransform != null)
+        {
             originalPos = spriteTransform.localPosition;
+            cachedSpriteRenderer = spriteTransform.GetComponent<SpriteRenderer>();
+        }
+
+        if (cachedSpriteRenderer == null)
+            cachedSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     void Update()
@@ -69,10 +87,11 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
             {
                 spriteTransform.localPosition = originalPos;
                 isUndoing = false;
+                useDisplaceAfterimage = false;
             }
             else
             {
-                if (!isUndoing)
+                if (!isUndoing && useMoveBounce)
                 {
                     float totalDistance = Mathf.Max(Vector3.Distance(transform.position, targetPos), 0.0001f);
                     float progress = 1f - Mathf.Clamp01(dist);
@@ -83,6 +102,8 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
                 {
                     spriteTransform.localPosition = originalPos;
                 }
+
+                UpdateDisplaceAfterimage();
             }
         }
     }
@@ -99,6 +120,8 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
         transform.position = position;
         targetPos = position;
         isUndoing = false;
+        useMoveBounce = true;
+        useDisplaceAfterimage = false;
         lastMoveDirection = Vector3.zero;
 
         if (spriteTransform != null)
@@ -142,6 +165,11 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
 
     public bool Move(Vector3 direction)
     {
+        return Move(direction, true, true, false, GetPushSound());
+    }
+
+    private bool Move(Vector3 direction, bool playImpactEffects, bool bounceDuringMove, bool showAfterimage, AudioClip moveSound)
+    {
         if (Vector3.Distance(transform.position, targetPos) > 0.05f)
             return false;
 
@@ -149,15 +177,20 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
             return false;
 
         isUndoing = false;
+        useMoveBounce = bounceDuringMove;
+        useDisplaceAfterimage = showAfterimage;
+        nextDisplaceAfterimageTime = 0f;
         lastMoveDirection = direction;
         targetPos += direction;
 
         //[사운드] 나무상자 밀기 소리 
         if (AudioManager.I != null)
         {
-            AudioManager.I.PlayOneShot(GetPushSound(), 0.9f);
+            AudioManager.I.PlayOneShot(moveSound, 0.9f);
         }
 
+        if (!playImpactEffects)
+            return true;
 
         Quaternion hitRotation = Quaternion.identity;
 
@@ -185,6 +218,77 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
         return true;
     }
 
+    private void UpdateDisplaceAfterimage()
+    {
+        if (!useDisplaceAfterimage || !showDisplaceAfterimage)
+            return;
+
+        if (cachedSpriteRenderer == null || cachedSpriteRenderer.sprite == null)
+            return;
+
+        if (Time.time < nextDisplaceAfterimageTime)
+            return;
+
+        nextDisplaceAfterimageTime = Time.time + Mathf.Max(0.01f, displaceAfterimageInterval);
+        SpawnDisplaceAfterimage();
+    }
+
+    private void SpawnDisplaceAfterimage()
+    {
+        GameObject afterimage = new GameObject("DisplaceAfterimage");
+        afterimage.transform.position = cachedSpriteRenderer.transform.position;
+        afterimage.transform.rotation = cachedSpriteRenderer.transform.rotation;
+        afterimage.transform.localScale = cachedSpriteRenderer.transform.lossyScale;
+
+        SpriteRenderer afterimageRenderer = afterimage.AddComponent<SpriteRenderer>();
+        afterimageRenderer.sprite = cachedSpriteRenderer.sprite;
+        afterimageRenderer.flipX = cachedSpriteRenderer.flipX;
+        afterimageRenderer.flipY = cachedSpriteRenderer.flipY;
+        afterimageRenderer.sharedMaterial = cachedSpriteRenderer.sharedMaterial;
+        afterimageRenderer.sortingLayerID = cachedSpriteRenderer.sortingLayerID;
+        afterimageRenderer.sortingOrder = cachedSpriteRenderer.sortingOrder - 1;
+
+        Color color = displaceAfterimageTint;
+        color.a = displaceAfterimageAlpha;
+        afterimageRenderer.color = color;
+
+        StartCoroutine(FadeAndDestroyAfterimage(
+            afterimageRenderer,
+            Mathf.Max(0.01f, displaceAfterimageLifetime),
+            color
+        ));
+    }
+
+    private IEnumerator FadeAndDestroyAfterimage(SpriteRenderer afterimageRenderer, float lifetime, Color startColor)
+    {
+        if (afterimageRenderer == null)
+            yield break;
+
+        float elapsed = 0f;
+        Transform afterimageTransform = afterimageRenderer.transform;
+        Vector3 startScale = afterimageTransform.localScale;
+        Vector3 endScale = startScale * 1.08f;
+
+        while (elapsed < lifetime)
+        {
+            if (afterimageRenderer == null)
+                yield break;
+
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / lifetime);
+
+            Color color = startColor;
+            color.a = Mathf.Lerp(startColor.a, 0f, t);
+            afterimageRenderer.color = color;
+            afterimageTransform.localScale = Vector3.Lerp(startScale, endScale, t);
+
+            yield return null;
+        }
+
+        if (afterimageRenderer != null)
+            Destroy(afterimageRenderer.gameObject);
+    }
+
     public bool CanDisplace(Vector3 direction)
     {
         if (IsBusy)
@@ -201,7 +305,7 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
 
     public bool Displace(Vector3 direction)
     {
-        return Move(direction);
+        return Move(direction, false, false, true, GetDisplaceSound());
     }
 
     public SpriteRenderer GetDisplacementRenderer()
@@ -227,9 +331,21 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
         return AudioManager.I != null ? AudioManager.I.sfxWoodPush : null;
     }
 
+    protected virtual AudioClip GetDisplaceSound()
+    {
+        if (AudioManager.I == null)
+            return null;
+
+        return AudioManager.I.sfxWoodDisplacePush != null
+            ? AudioManager.I.sfxWoodDisplacePush
+            : GetPushSound();
+    }
+
     public void UndoMove(Vector3 reverseDirection)
     {
         isUndoing = true;
+        useMoveBounce = false;
+        useDisplaceAfterimage = false;
         lastMoveDirection = reverseDirection;
         targetPos += reverseDirection;
     }
