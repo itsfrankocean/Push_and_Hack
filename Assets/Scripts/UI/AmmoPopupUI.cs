@@ -22,10 +22,19 @@ public class AmmoPopupUI : MonoBehaviour
     [Header("Ammo List")]
     public AmmoData[] ammoList;
 
+    [Header("Visibility")]
+    public bool hideWhenEmpty = true;
+
     private int currentIndex = 0;
 
     void Start()
     {
+        if (hideWhenEmpty && !HasAmmoEntries())
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+
         RefreshUI();
     }
 

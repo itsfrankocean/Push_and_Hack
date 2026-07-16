@@ -1279,6 +1279,34 @@ MonoBehaviour:
   stageIntroGroup: {fileID: 4974358788171236018}
   stageIntroText: {fileID: 893803806794983034}
   stageNameText: {fileID: 8948560880099936570}
+  introAmmoSource: {fileID: 0}
+  controlsHintBackgroundSprite: {fileID: 21300000, guid: ee956f1bd11895d4c913d6544dd71bb5, type: 3}
+  showControlsHintAfterIntro: 1
+  controlsHintSceneName: Level1
+  controlsHintShootingSceneName: Level3
+  controlsHintSecondShootingSceneName: Level4
+  controlsHintSize: {x: 520, y: 230}
+  controlsHintShootingSize: {x: 620, y: 340}
+  controlsHintPosition: {x: -70, y: -82}
+  infoPopupToggleKey: 101
+  infoPopupToggleHintText: E키로 설명창 넣고 빼기
+  infoPopupSlideSpeed: 8
+  showStage3InfoPopups: 1
+  stage3InfoPopupSceneName: Level3
+  stageInfoPopupBackgroundSprite: {fileID: 21300000, guid: ee956f1bd11895d4c913d6544dd71bb5, type: 3}
+  stageInfoIronBoxSprite: {fileID: 7727864288478252623, guid: acb3a60234131ba4fb223808b465a4b5, type: 3}
+  stageInfoGoldBoxSprite: {fileID: -111365667204377273, guid: 7fa833478fe494c40bc9ceac24cd652c, type: 3}
+  stageInfoGoldBulletSprite: {fileID: 21300000, guid: 0f2a595136cb5044f8384011c49a24e8, type: 3}
+  stageInfoPurpleBulletSprite: {fileID: 3836824053134034872, guid: b22b1b0c16c085c48a73324a472edfa0, type: 3}
+  stageInfoPopupSize: {x: 400, y: 220}
+  stageInfoBoxPopupPosition: {x: 250, y: 610}
+  stageInfoBulletPopupPosition: {x: 250, y: 380}
+  showStage5InfoPopup: 1
+  stage5InfoPopupSceneName: Level5
+  stage5InfoPopupSecondSceneName: Level5 1
+  stageInfoRemoteBulletSprite: {fileID: -3981987312920499079, guid: 2b1a0d44f76a35c42856de64a7d2991b, type: 3}
+  stage5InfoPopupPosition: {x: 250, y: 380}
+  stage5InfoBulletIconSize: {x: 118, y: 44}
   fadeInTime: 0.35
   holdTime: 1.5
   fadeOutTime: 0.35

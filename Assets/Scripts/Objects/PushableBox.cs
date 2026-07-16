@@ -46,6 +46,8 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
 
     private const float ARRIVE_THRESHOLD = 0.05f;
     private const float ARRIVE_THRESHOLD_SQR = ARRIVE_THRESHOLD * ARRIVE_THRESHOLD;
+    private const float TILE_MATCH_THRESHOLD_SQR = 0.01f;
+    private Grid cachedGrid;
 
     public bool IsBusy
     {
@@ -300,6 +302,9 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
         if (hit != null)
             return false;
 
+        if (IsOccupiedByPlayerOrEnemy(checkPos))
+            return false;
+
         return !HasKeyCardAt(checkPos);
     }
 
@@ -324,6 +329,55 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
         }
 
         return false;
+    }
+
+    private bool IsOccupiedByPlayerOrEnemy(Vector3 checkPos)
+    {
+        PlayerController player = FindFirstObjectByType<PlayerController>();
+        if (player != null && player.isActiveAndEnabled)
+        {
+            if (IsSameTile(player.GetCurrentTilePosition(), checkPos) ||
+                IsSameTile(player.transform.position, checkPos))
+            {
+                return true;
+            }
+        }
+
+        PatrolEnemy[] enemies = FindObjectsByType<PatrolEnemy>(FindObjectsSortMode.None);
+
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            PatrolEnemy enemy = enemies[i];
+
+            if (enemy == null || !enemy.isActiveAndEnabled)
+                continue;
+
+            if (IsSameTile(enemy.GetCurrentTilePosition(), checkPos) ||
+                IsSameTile(enemy.transform.position, checkPos))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsSameTile(Vector3 a, Vector3 b)
+    {
+        if (TryGetGrid(out Grid grid))
+            return grid.WorldToCell(a) == grid.WorldToCell(b);
+
+        Vector2 delta = new Vector2(a.x - b.x, a.y - b.y);
+        return delta.sqrMagnitude <= TILE_MATCH_THRESHOLD_SQR;
+    }
+
+    private bool TryGetGrid(out Grid grid)
+    {
+        if (cachedGrid == null)
+            cachedGrid = FindFirstObjectByType<Grid>();
+
+        grid = cachedGrid;
+        return grid != null;
     }
 
     protected virtual AudioClip GetPushSound()
