@@ -3172,7 +3172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Elevator
   stageUI: {fileID: 1298724760}
-  nextSceneName: Level5
+  nextSceneName: MainMenu
   clearPopupDelay: 0.6
 --- !u!95 &658895401
 Animator:
