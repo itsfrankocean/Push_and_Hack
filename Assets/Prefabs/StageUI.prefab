@@ -1289,7 +1289,7 @@ MonoBehaviour:
   controlsHintShootingSize: {x: 620, y: 340}
   controlsHintPosition: {x: -70, y: -82}
   infoPopupToggleKey: 101
-  infoPopupToggleHintText: E키로 설명창 넣고 빼기
+  infoPopupToggleHintText: *id772830314
   infoPopupSlideSpeed: 8
   showStage3InfoPopups: 1
   stage3InfoPopupSceneName: Level3
@@ -1301,9 +1301,13 @@ MonoBehaviour:
   stageInfoPopupSize: {x: 400, y: 220}
   stageInfoBoxPopupPosition: {x: 250, y: 610}
   stageInfoBulletPopupPosition: {x: 250, y: 380}
+  showStage4InfoPopup: 1
+  stage4InfoPopupSceneName: Level4
+  stage4InfoPopupPosition: {x: 250, y: 380}
+  stage4InfoBulletIconSize: {x: 118, y: 44}
   showStage5InfoPopup: 1
-  stage5InfoPopupSceneName: Level5
-  stage5InfoPopupSecondSceneName: Level5 1
+  stage5InfoPopupSceneName: Level6
+  stage5InfoPopupSecondSceneName: Level6 1
   stageInfoRemoteBulletSprite: {fileID: -3981987312920499079, guid: 2b1a0d44f76a35c42856de64a7d2991b, type: 3}
   stage5InfoPopupPosition: {x: 250, y: 380}
   stage5InfoBulletIconSize: {x: 118, y: 44}

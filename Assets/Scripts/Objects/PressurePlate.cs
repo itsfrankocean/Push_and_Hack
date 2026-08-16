@@ -21,6 +21,23 @@ public class PressurePlate : MonoBehaviour
     private bool isPressed = false;
     private Grid cachedGrid;
 
+    public static void RefreshAllStates()
+    {
+        PressurePlate[] plates = UnityEngine.Object.FindObjectsByType<PressurePlate>(FindObjectsSortMode.None);
+
+        for (int i = 0; i < plates.Length; i++)
+        {
+            if (plates[i] != null && plates[i].isActiveAndEnabled)
+                plates[i].RefreshStateImmediately();
+        }
+    }
+
+    public void RefreshStateImmediately()
+    {
+        CleanupInvalidOccupants();
+        RefreshPressedState();
+    }
+
     private void Start()
     {
         initialScale = transform.localScale;
@@ -110,7 +127,55 @@ public class PressurePlate : MonoBehaviour
 
     private bool ShouldBePressed()
     {
-        return occupants.Count > 0 || HasPatrolEnemyOnPlate();
+        return HasValidStoredOccupant() ||
+               HasPlayerOnPlate() ||
+               HasPushableBoxOnPlate() ||
+               HasPatrolEnemyOnPlate();
+    }
+
+    private bool HasValidStoredOccupant()
+    {
+        foreach (Collider2D occupant in occupants)
+        {
+            if (occupant != null &&
+                occupant.enabled &&
+                occupant.gameObject.activeInHierarchy &&
+                IsValidTriggerOccupant(occupant))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool HasPlayerOnPlate()
+    {
+        PlayerController player = FindFirstObjectByType<PlayerController>();
+
+        if (player == null || !player.isActiveAndEnabled)
+            return false;
+
+        return IsSameTile(player.GetCurrentTilePosition(), transform.position);
+    }
+
+    private bool HasPushableBoxOnPlate()
+    {
+        PushableBox[] boxes = FindObjectsByType<PushableBox>(FindObjectsSortMode.None);
+        Vector3 platePosition = transform.position;
+
+        for (int i = 0; i < boxes.Length; i++)
+        {
+            PushableBox box = boxes[i];
+
+            if (box == null || !box.isActiveAndEnabled)
+                continue;
+
+            if (IsSameTile(box.GetCurrentTilePosition(), platePosition))
+                return true;
+        }
+
+        return false;
     }
 
     private bool HasPatrolEnemyOnPlate()

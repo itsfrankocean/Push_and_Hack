@@ -707,9 +707,6 @@ public class PlayerController : MonoBehaviour
         moveInProgress = false;
         moveProgress = 0f;
 
-        if (playerCol != null)
-            playerCol.enabled = true;
-
         if (spriteTransform != null)
             spriteTransform.localPosition = spriteOriginalLocalPos;
 
@@ -725,6 +722,9 @@ public class PlayerController : MonoBehaviour
 
         if (movePoint != null)
             transform.position = movePoint.position;
+
+        if (playerCol != null)
+            playerCol.enabled = true;
     }
 
     private IEnumerator ElectricDeathRoutine()

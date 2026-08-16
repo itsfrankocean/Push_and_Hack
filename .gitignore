@@ -52,6 +52,13 @@ Tools/__pycache__/
 round*_current_screen.png
 UpgradeLog.htm
 
+# Local application, portfolio, and Codex working files
+/.codex_tmp/
+/tmp/
+/BRIDGE_2026-2_지원_안태우*/
+/presentation_*.md
+/presentation_*.png
+
 # Unity temporary/private files
 *.tmp
 *.private
