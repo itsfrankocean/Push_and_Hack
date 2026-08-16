@@ -1055,8 +1055,8 @@ public class StageUIController : MonoBehaviour
 
     private string FormatInfoPopupToggleHintText(string hintText)
     {
-        if (string.IsNullOrEmpty(hintText))
-            return "";
+        if (string.IsNullOrWhiteSpace(hintText) || hintText.StartsWith("*id"))
+            hintText = "E키로 설명창 넣고 빼기";
 
         if (hintText[0] != 'e' && hintText[0] != 'E')
             return hintText;
@@ -3658,7 +3658,9 @@ public class StageUIController : MonoBehaviour
 
         if (nextIndex >= SceneManager.sceneCountInBuildSettings)
         {
-            Debug.LogWarning("다음 씬이 없습니다. Build Settings에 다음 스테이지 씬을 추가하세요.");
+            Debug.Log("마지막 스테이지를 완료해 메인 메뉴로 이동합니다.");
+            PrepareForSceneLoad();
+            SceneManager.LoadScene(mainMenuSceneName);
             return;
         }
 
