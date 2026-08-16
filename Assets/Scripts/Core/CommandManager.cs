@@ -46,6 +46,7 @@ public class CommandManager : MonoBehaviour
 
         ICommand lastCommand = history.Pop();
         lastCommand.Undo();
+        PressurePlate.RefreshAllStates();
 
         if (UndoGlitchEffect.Instance != null)
             UndoGlitchEffect.Instance.Play();

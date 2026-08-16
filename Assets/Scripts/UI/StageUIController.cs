@@ -44,10 +44,16 @@ public class StageUIController : MonoBehaviour
     public Vector2 stageInfoBoxPopupPosition = new Vector2(250f, 610f);
     public Vector2 stageInfoBulletPopupPosition = new Vector2(250f, 380f);
 
+    [Header("Stage 4 Info Popup")]
+    public bool showStage4InfoPopup = true;
+    public string stage4InfoPopupSceneName = "Level4";
+    public Vector2 stage4InfoPopupPosition = new Vector2(250f, 380f);
+    public Vector2 stage4InfoBulletIconSize = new Vector2(118f, 44f);
+
     [Header("Stage 5 Info Popup")]
     public bool showStage5InfoPopup = true;
-    public string stage5InfoPopupSceneName = "Level5";
-    public string stage5InfoPopupSecondSceneName = "Level5 1";
+    public string stage5InfoPopupSceneName = "Level6";
+    public string stage5InfoPopupSecondSceneName = "Level6 1";
     public Sprite stageInfoRemoteBulletSprite;
     public Vector2 stage5InfoPopupPosition = new Vector2(250f, 380f);
     public Vector2 stage5InfoBulletIconSize = new Vector2(118f, 44f);
@@ -140,6 +146,7 @@ public class StageUIController : MonoBehaviour
     private Coroutine controlsHintRoutine;
     private GameObject stage3BoxInfoPopup;
     private GameObject stage3BulletInfoPopup;
+    private GameObject stage4BulletInfoPopup;
     private GameObject stage5BulletInfoPopup;
     private Coroutine stage3InfoPopupRoutine;
     private bool areInfoPopupsVisible = true;
@@ -317,6 +324,9 @@ public class StageUIController : MonoBehaviour
         if (stage3BulletInfoPopup != null)
             stage3BulletInfoPopup.SetActive(false);
 
+        if (stage4BulletInfoPopup != null)
+            stage4BulletInfoPopup.SetActive(false);
+
         if (stage5BulletInfoPopup != null)
             stage5BulletInfoPopup.SetActive(false);
     }
@@ -342,6 +352,7 @@ public class StageUIController : MonoBehaviour
 
         HideControlsHintImmediate();
         HideStage3InfoPopupsImmediate();
+        HideStage4InfoPopupImmediate();
         HideStage5InfoPopupImmediate();
         introRoutine = StartCoroutine(StageIntroFadeRoutine());
     }
@@ -377,6 +388,7 @@ public class StageUIController : MonoBehaviour
 
         ShowControlsHintAfterIntro();
         ShowStage3InfoPopupsAfterIntro();
+        ShowStage4InfoPopupAfterIntro();
         ShowStage5InfoPopupAfterIntro();
         introRoutine = null;
     }
@@ -797,8 +809,7 @@ public class StageUIController : MonoBehaviour
             stage3BulletInfoPopup = CreateStage3InfoPopup(parent, "Stage3BulletInfoPopup", stageInfoBulletPopupPosition);
             CreateStage3InfoContent(
                 stage3BulletInfoPopup.transform,
-                new Stage3InfoRowData(stageInfoGoldBulletSprite, "상자 격파", new Vector2(118f, 44f)),
-                new Stage3InfoRowData(stageInfoPurpleBulletSprite, "플레이어와 물체의 위치 교환", new Vector2(118f, 44f))
+                new Stage3InfoRowData(stageInfoGoldBulletSprite, "상자 격파", new Vector2(118f, 44f))
             );
         }
         else
@@ -823,6 +834,45 @@ public class StageUIController : MonoBehaviour
 
         if (stage3BulletInfoPopup != null)
             stage3BulletInfoPopup.SetActive(false);
+
+        areInfoPopupsVisible = false;
+    }
+
+    private void ShowStage4InfoPopupAfterIntro()
+    {
+        if (!ShouldShowStage4InfoPopup())
+            return;
+
+        Transform parent = ResolveStage3InfoPopupParent();
+
+        if (stage4BulletInfoPopup == null)
+        {
+            stage4BulletInfoPopup = CreateStage3InfoPopup(parent, "Stage4BulletInfoPopup", stage4InfoPopupPosition);
+            CreateInfoPopupToggleHint(stage4BulletInfoPopup.transform, ResolveStage3InfoPopupSize(), true);
+            CreateStage3InfoContent(
+                stage4BulletInfoPopup.transform,
+                new Stage3InfoRowData(stageInfoPurpleBulletSprite, "플레이어와 물체의 위치 교환", stage4InfoBulletIconSize)
+            );
+        }
+        else
+        {
+            stage4BulletInfoPopup.SetActive(true);
+        }
+
+        areInfoPopupsVisible = true;
+        SetStage4InfoPopupVisible(true, true);
+    }
+
+    private void HideStage4InfoPopupImmediate()
+    {
+        if (stage3InfoPopupRoutine != null)
+        {
+            StopCoroutine(stage3InfoPopupRoutine);
+            stage3InfoPopupRoutine = null;
+        }
+
+        if (stage4BulletInfoPopup != null)
+            stage4BulletInfoPopup.SetActive(false);
 
         areInfoPopupsVisible = false;
     }
@@ -875,6 +925,13 @@ public class StageUIController : MonoBehaviour
 
         return (!string.IsNullOrEmpty(stage5InfoPopupSceneName) && sceneName == stage5InfoPopupSceneName) ||
                (!string.IsNullOrEmpty(stage5InfoPopupSecondSceneName) && sceneName == stage5InfoPopupSecondSceneName);
+    }
+
+    private bool ShouldShowStage4InfoPopup()
+    {
+        return showStage4InfoPopup &&
+               !string.IsNullOrEmpty(stage4InfoPopupSceneName) &&
+               SceneManager.GetActiveScene().name == stage4InfoPopupSceneName;
     }
 
     private bool ShouldShowStage3InfoPopups()
@@ -1531,6 +1588,7 @@ public class StageUIController : MonoBehaviour
     {
         return (ShouldShowControlsHint() && controlsHintPanel != null) ||
                (ShouldShowStage3InfoPopups() && (stage3BoxInfoPopup != null || stage3BulletInfoPopup != null)) ||
+               (ShouldShowStage4InfoPopup() && stage4BulletInfoPopup != null) ||
                (ShouldShowStage5InfoPopup() && stage5BulletInfoPopup != null);
     }
 
@@ -1541,6 +1599,9 @@ public class StageUIController : MonoBehaviour
 
         if (ShouldShowStage3InfoPopups())
             SetStage3InfoPopupsVisible(visible, immediate);
+
+        if (ShouldShowStage4InfoPopup())
+            SetStage4InfoPopupVisible(visible, immediate);
 
         if (ShouldShowStage5InfoPopup())
             SetStage5InfoPopupVisible(visible, immediate);
@@ -1634,6 +1695,35 @@ public class StageUIController : MonoBehaviour
         stage3InfoPopupRoutine = StartCoroutine(SlideStage3InfoPopupsRoutine(boxRect, boxTarget, bulletRect, bulletTarget));
     }
 
+    private void SetStage4InfoPopupVisible(bool visible, bool immediate)
+    {
+        RectTransform bulletRect = GetPopupRect(stage4BulletInfoPopup);
+
+        if (bulletRect == null)
+            return;
+
+        if (stage3InfoPopupRoutine != null)
+        {
+            StopCoroutine(stage3InfoPopupRoutine);
+            stage3InfoPopupRoutine = null;
+        }
+
+        stage4BulletInfoPopup.SetActive(true);
+
+        Vector2 target = new Vector2(
+            visible ? stage4InfoPopupPosition.x : ResolveLeftHiddenPopupX(bulletRect),
+            stage4InfoPopupPosition.y
+        );
+
+        if (immediate)
+        {
+            bulletRect.anchoredPosition = target;
+            return;
+        }
+
+        stage3InfoPopupRoutine = StartCoroutine(SlideSingleInfoPopupRoutine(bulletRect, target));
+    }
+
     private void SetStage5InfoPopupVisible(bool visible, bool immediate)
     {
         RectTransform bulletRect = GetPopupRect(stage5BulletInfoPopup);
@@ -1660,10 +1750,10 @@ public class StageUIController : MonoBehaviour
             return;
         }
 
-        stage3InfoPopupRoutine = StartCoroutine(SlideStage5InfoPopupRoutine(bulletRect, target));
+        stage3InfoPopupRoutine = StartCoroutine(SlideSingleInfoPopupRoutine(bulletRect, target));
     }
 
-    private IEnumerator SlideStage5InfoPopupRoutine(RectTransform bulletRect, Vector2 target)
+    private IEnumerator SlideSingleInfoPopupRoutine(RectTransform bulletRect, Vector2 target)
     {
         yield return SlideRectAnchoredPosition(bulletRect, target);
         stage3InfoPopupRoutine = null;

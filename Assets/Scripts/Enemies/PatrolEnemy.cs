@@ -116,11 +116,6 @@ public class PatrolEnemy : MonoBehaviour, IDamageable, ITurnActor, IProjectileDi
             return;
 
         ReverseDirection();
-        step = GetMoveDirection() * GetStepSize();
-
-        if (TryStartMove(step))
-            return;
-
         KillPlayerIfTouching();
     }
 

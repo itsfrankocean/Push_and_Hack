@@ -57,6 +57,11 @@ public class PushableBox : MonoBehaviour, IDamageable, IProjectileDisplaceable
         }
     }
 
+    void Awake()
+    {
+        targetPos = transform.position;
+    }
+
     void Start()
     {
         targetPos = transform.position;
