@@ -9,9 +9,9 @@
 
 ## Windows 데모 다운로드
 
-[Push & Hack Windows Demo — Levels 1–5](https://github.com/itsfrankocean/Push_and_Hack/releases/tag/v0.1.0-demo)
+[Push & Hack Windows Portfolio Build — Levels 1–8](https://github.com/itsfrankocean/Push_and_Hack/releases/tag/v0.1.0-demo)
 
-ZIP 파일 전체를 압축 해제한 뒤 `PushAndHack.exe`를 실행해 주세요. 현재 데모에는 메인 메뉴와 Level 1부터 Level 5까지 포함되어 있습니다.
+ZIP 파일 전체를 압축 해제한 뒤 `PushAndHack.exe`를 실행해 주세요. 현재 빌드에는 메인 메뉴와 Level 1부터 Level 8까지 포함되어 있습니다.
 
 ---
 
@@ -132,7 +132,7 @@ ZIP 파일 전체를 압축 해제한 뒤 `PushAndHack.exe`를 실행해 주세�
 ## 버전 관리
 
 본 프로젝트는 Unity Version Control (Plastic SCM)을 통해 팀 협업 및 브랜치 관리를 진행했습니다.
-크래프톤 정글 랩 지원을 위해 GitHub에는 최신 소스코드와 Windows 데모 빌드를 공개했으며, 전체 개발 히스토리는 Unity Cloud에서 관리했습니다.
+포트폴리오 검증을 위해 GitHub에는 최신 소스코드와 Windows 빌드를 공개했으며, 전체 개발 히스토리는 Unity Cloud에서 관리했습니다.
 
 ![Unity Version Control](screenshots/uvc.png)
 
@@ -150,9 +150,9 @@ ZIP 파일 전체를 압축 해제한 뒤 `PushAndHack.exe`를 실행해 주세�
 
 ## 실행 방법
 
-Windows x64 데모는 [GitHub Releases](https://github.com/itsfrankocean/Push_and_Hack/releases/tag/v0.1.0-demo)에서 다운로드할 수 있습니다.
+Windows x64 빌드는 [GitHub Releases](https://github.com/itsfrankocean/Push_and_Hack/releases/tag/v0.1.0-demo)에서 다운로드할 수 있습니다.
 
-1. `PushAndHack-Windows-x64-Levels1-5.zip` 파일을 다운로드합니다.
+1. `PushAndHack-Windows-x64-Levels1-8.zip` 파일을 다운로드합니다.
 2. ZIP 파일 전체를 원하는 폴더에 압축 해제합니다.
 3. `PushAndHack.exe`를 실행합니다.
 
